@@ -2,6 +2,7 @@ package me.NoChance.PvPManager.Managers;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
@@ -65,7 +66,11 @@ public class ConfigManager {
 			if (configFile.exists()) {
 				initConfig();
 				configFile.delete();
-				config = new Config(plugin, "config.yml");
+				try {
+					config = new Config(plugin, "config.yml");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
 				Settings.updateDefaultConfig(config, Integer.parseInt(Version.getConfigVersion()));
 				Log.warning("Configuration file updated to version: " + Settings.getConfigVersion());
 				Log.warning("It's recommended that you check the file and adjust the new settings");
@@ -86,7 +91,11 @@ public class ConfigManager {
 	}
 
 	private void initConfig() {
-		config = new Config(plugin, "config.yml");
+		try {
+			config = new Config(plugin, "config.yml");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		Settings.initizalizeVariables(config);
 	}
 

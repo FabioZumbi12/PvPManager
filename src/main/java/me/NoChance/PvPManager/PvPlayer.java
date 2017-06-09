@@ -33,13 +33,13 @@ public class PvPlayer extends EcoPlayer {
 	private long respawnTime;
 	private long taggedTime;
 	private NewbieTask newbieTask;
-	private final HashMap<String, Integer> victim = new HashMap<>();
+	private final HashMap<String, Integer> victim = new HashMap<String, Integer>();
 	private final PvPManager plugin;
 	private TeamProfile teamProfile;
 
 	public PvPlayer(final Player player, final PvPManager plugin) {
 		super(plugin.getDependencyManager().getEconomy());
-		this.player = new WeakReference<>(player);
+		this.player = new WeakReference<Player>(player);
 		this.uuid = player.getUniqueId();
 		this.pvpState = Settings.isDefaultPvp();
 		this.plugin = plugin;
@@ -257,16 +257,16 @@ public class PvPlayer extends EcoPlayer {
 
 	public void loadUserData(final Map<String, Object> userData) {
 		if (userData.get(UserDataFields.PVP_STATUS) instanceof Boolean) {
-			this.pvpState = (boolean) userData.get(UserDataFields.PVP_STATUS);
+			this.pvpState = Boolean.valueOf(userData.get(UserDataFields.PVP_STATUS).toString());
 		}
 		if (userData.get(UserDataFields.TOGGLE_TIME) instanceof Long) {
-			this.toggleTime = (long) userData.get(UserDataFields.TOGGLE_TIME);
+			this.toggleTime = Long.parseLong(userData.get(UserDataFields.TOGGLE_TIME).toString());
 		}
 		if (userData.get(UserDataFields.NEWBIE) instanceof Boolean) {
-			this.newbie = (boolean) userData.get(UserDataFields.NEWBIE);
+			this.newbie = Boolean.valueOf(userData.get(UserDataFields.NEWBIE).toString());
 			if (this.newbie) {
 				if (userData.get(UserDataFields.NEWBIE_TIMELEFT) instanceof Long) {
-					final long timeleft = (long) userData.get(UserDataFields.NEWBIE_TIMELEFT);
+					final long timeleft = Long.parseLong(userData.get(UserDataFields.NEWBIE_TIMELEFT).toString());
 					this.newbieTask = new NewbieTask(this);
 					newbieTask.runTaskLater(plugin, timeleft / 50);
 				}
@@ -275,7 +275,7 @@ public class PvPlayer extends EcoPlayer {
 	}
 
 	public final Map<String, Object> getUserData() {
-		final Map<String, Object> userData = new HashMap<>();
+		final Map<String, Object> userData = new HashMap<String, Object>();
 		userData.put(UserDataFields.PVP_STATUS, hasPvPEnabled());
 		userData.put(UserDataFields.TOGGLE_TIME, getToggleTime());
 		userData.put(UserDataFields.NEWBIE, isNewbie());
@@ -285,7 +285,7 @@ public class PvPlayer extends EcoPlayer {
 
 	public final void updatePlayer(final Player p) {
 		if (!p.equals(getPlayer())) {
-			player = new WeakReference<>(p);
+			player = new WeakReference<Player>(p);
 			if (teamProfile != null) {
 				teamProfile = new TeamProfile(this);
 			}

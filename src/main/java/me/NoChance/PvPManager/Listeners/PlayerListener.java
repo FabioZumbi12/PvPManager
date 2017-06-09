@@ -70,7 +70,6 @@ public class PlayerListener implements Listener {
 		ph.removeUser(pvPlayer);
 	}
 
-	@SuppressWarnings("null")
 	@EventHandler(priority = EventPriority.HIGH)
 	public final void onPlayerDeath(final PlayerDeathEvent event) {
 		final Player player = event.getEntity();

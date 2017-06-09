@@ -9,7 +9,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -25,15 +27,14 @@ public class Config extends YamlConfiguration {
 	private final FileConfiguration config;
 	private final PvPManager plugin;
 
-	@SuppressWarnings("deprecation")
-	public Config(final PvPManager plugin, final String name) {
+	public Config(final PvPManager plugin, final String name) throws UnsupportedEncodingException {
 		this.plugin = plugin;
 		final File file1 = new File(plugin.getDataFolder(), name);
 		if (!file1.exists()) {
 			this.prepareFile(file1, name);
 		}
 		this.file = file1;
-		this.config = YamlConfiguration.loadConfiguration(this.getConfigContent(file1));
+		this.config = YamlConfiguration.loadConfiguration(new BufferedReader(new InputStreamReader(this.getConfigContent(file1), "UTF-8")));
 	}
 
 	@Override
